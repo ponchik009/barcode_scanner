@@ -1,6 +1,7 @@
 import cv2
 import os
 import webbrowser
+import time
 
 print(cv2.__version__)
 print(cv2.version.opencv_version)
@@ -22,20 +23,28 @@ bardet = cv2.barcode.BarcodeDetector()
 #print(ok, decoded_info, decoded_type, corners)
 
 while True:
+    print(1)
     _, frame = cap.read()
-    #cv2.imshow('RTSP stream', frame)
-    ok, decoded_info, decoded_type, corners = bardet.detectAndDecode(frame)
+    # cv2.imshow('RTSP stream', frame)
+    try:
+        ok, decoded_info, decoded_type, corners = bardet.detectAndDecode(frame)
 
-    if ok:
-        print(decoded_info[0])
+        if ok:
+            print(decoded_info[0])
 
-        url = "https://barcode-list.ru/barcode/RU/%D0%9F%D0%BE%D0%B8%D1%81%D0%BA.htm?barcode=" + decoded_info[0]
-        webbrowser.open(url, new=0, autoraise=True)
-        break
-
+            url = "https://barcode-list.ru/barcode/RU/%D0%9F%D0%BE%D0%B8%D1%81%D0%BA.htm?barcode=" + decoded_info[0]
+            webbrowser.open(url, new=0, autoraise=True)
+            break
+        else:
+            print(ok)
+    except:
+        print('error')
+        pass
 
     if cv2.waitKey(1) == 27:
         break
+    
+    time.sleep(0.5)
 
 cap.release()
 cv2.destroyAllWindows()
